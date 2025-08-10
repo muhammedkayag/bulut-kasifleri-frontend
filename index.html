@@ -10,6 +10,45 @@
         #data-container { margin-top: 30px; border: 1px solid #ccc; padding: 20px; text-align: left; }
     </style>
 </head>
+    <script>
+    const getDataBtn = document.getElementById('getDataBtn');
+    const dataContainer = document.getElementById('data-container');
+    const apiDataElement = document.getElementById('api-data');
+
+    // --- GÜNCELLEMEN GEREKEN DEĞİŞKENLER ---
+    const apiUrl = 'https://tsgkbulutctf.editaga00.workers.dev/';
+    const apiKey = 'super-guvenli-anahtar-12345'; // örn: "super-guvenli-anahtar-12345"
+
+    getDataBtn.addEventListener('click', async () => {
+        getDataBtn.textContent = 'Veriler Alınıyor...';
+        getDataBtn.disabled = true;
+
+        try {
+            const response = await fetch(apiUrl, {
+                headers: {
+                    'X-API-Key': apiKey
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`API Hatası: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            
+            // Gelen JSON verisini formatlayıp ekrana yazdır
+            apiDataElement.textContent = JSON.stringify(data, null, 2);
+            dataContainer.style.display = 'block';
+
+        } catch (error) {
+            apiDataElement.textContent = `Bir hata oluştu: ${error.message}`;
+            dataContainer.style.display = 'block';
+        } finally {
+            getDataBtn.textContent = 'Verileri Getir';
+            getDataBtn.disabled = false;
+        }
+    });
+</script>
 <body>
     <h1>☁️ Bulut Kaşifleri Projesi ☁️</h1>
     <p>Bu sayfa, Bulut Kaşifleri CTF'inin ilk görevi için hazırlandı.</p>
